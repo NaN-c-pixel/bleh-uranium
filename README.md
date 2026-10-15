@@ -1,6 +1,6 @@
 # bleh-uranium
-alo hello testing
-đây là của Ngô Mạnh Hùng 7B NHAA
+bài thực hành
+
 (ngay 1:) (editor) (hung)
 lỗi nhiều quá
 - vậy hả? uhhhhhhh sửa cái bị n$ đi, nó bị đóng băng rùi
@@ -11,3 +11,7 @@ nhưng mà cái xoay xoay thì sao?
 - đơ zì vậy?
 cái hình nguyên tử á
 - để check var thử :)))
+(ngày 3) (hung) (ny)
+- check rùi, cái hóa.html bị lỗi, chắc phải tạo index lại
+hèn gì, thấy mô hình không xoay, đơ luôn rùi
+-  :)) chắc tạo index
