@@ -1,7 +1,11 @@
 # bleh-uranium
 bài thực hành
 ĐÂY LÀ LÀM BỞI NHÓM TỔ 4
-KHÔNG CÓ AI Ở TRONG CÁI PHẦN BÀI THỰC HÀNH NÀY ( FAN KO AI!!!! )
+KHÔNG CÓ AI Ở TRONG CÁI PHẦN BÀI THỰC HÀNH NÀY
+
+( FAN KO AI!!!! )
+
+
 (ngay 1:) (editor) (hung)
 lỗi nhiều quá
 - vậy hả? uhhhhhhh sửa cái bị n$ đi, nó bị đóng băng rùi
@@ -24,7 +28,25 @@ hèn gì, thấy mô hình không xoay, đơ luôn rùi
 - ok, nó màu zì vậy?
 màu tối tôi thui
 - cũng được
+- (a
 
 (ngày 5) (hung) (ny) 
 ây cậu có thể dịch dc khum?
 - mmmm ok
+
+
+(ngày 6) (ny) (designer)
+
+sao màu cứ tồi tối thế
+
+ủa vậy hả hay là cần sáng lên chút
+
+ừ rồi thêm cái welcome màn hình nữa 
+
+thuiiiii
+
+điiiiii làm đi cho đẹp
+
+... ok
+
+yay
