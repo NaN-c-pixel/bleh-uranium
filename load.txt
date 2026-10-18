@@ -1,0 +1,2 @@
+cd /d F:\
+F:\python\python.exe -m http.server 8000
