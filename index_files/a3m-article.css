@@ -1,0 +1,312 @@
+/*
+ * The article under the stage, and the footer.
+ *
+ * Light section on purpose. The stage is a dark instrument; the article is long
+ * reading (tables, a FAQ, sources) and it carries the display ads. Dark text on
+ * a pale ground reads faster and longer, prints cleanly for the classroom, and
+ * is the surface ad creatives are designed for. A soft gradient eases the
+ * edge between the two.
+ *
+ * Mediavine rule (CONTRACT.md): `article.a3m-article.entry-content` inside
+ * `body.single-post` is Mediavine's content container, and it inserts units
+ * between the TOP-LEVEL children. So:
+ *  - the 720px measure lives on the article's own padding, never on the children,
+ *    so injected ad containers get the same column;
+ *  - children are styled by enumerated tags, `> :is(p, h2, h3, ul, ol, table,
+ *    figure)`, never `> :not(...)`, which would also narrow the injected divs.
+ */
+
+body.a3m-body .a3m-article {
+	--a3m-measure: 720px;
+	position: relative;
+	z-index: 1;
+	display: flow-root;
+	margin: 0;
+	padding: 72px max(20px, calc((100% - var(--a3m-measure)) / 2)) 40px;
+	color: #243252;
+	font: 1.0625rem / 1.72 var(--a3m-sans);
+	background: linear-gradient(180deg, #0a1330 0, #f3f6fb 120px, #f3f6fb 100%);
+}
+
+body.a3m-body .a3m-article > :is(p, ul, ol, table, figure) {
+	margin-top: 0;
+	margin-bottom: 1.15em;
+}
+
+/* Lead paragraph: the first element is p.a3m-answer. */
+body.a3m-body .a3m-article > p.a3m-answer {
+	margin-top: 0;
+	padding: 4px 0 4px 18px;
+	color: #0f1b38;
+	font: 600 1.28rem / 1.5 var(--a3m-serif);
+	letter-spacing: -0.005em;
+	border-left: 4px solid #1fbfa6;
+}
+
+body.a3m-body .a3m-article > h2 {
+	margin: 2.5em 0 0.55em;
+	color: #0b1530;
+	font: 700 clamp(1.5rem, 3.4vw, 1.95rem) / 1.2 var(--a3m-serif);
+	letter-spacing: -0.012em;
+	text-wrap: balance;
+	scroll-margin-top: 24px;
+}
+
+body.a3m-body .a3m-article > h2::before {
+	content: '';
+	display: block;
+	width: 40px;
+	height: 3px;
+	margin-bottom: 14px;
+	background: linear-gradient(90deg, #1fbfa6, #5ab0ff);
+	border-radius: 2px;
+}
+
+body.a3m-body .a3m-article > h3 {
+	margin: 1.7em 0 0.35em;
+	color: #0b1530;
+	font: 700 1.18rem / 1.3 var(--a3m-serif);
+}
+
+body.a3m-body .a3m-article a {
+	color: #0a7566;
+	text-decoration: underline;
+	text-decoration-thickness: 1px;
+	text-underline-offset: 3px;
+	transition: color var(--d1);
+}
+
+body.a3m-body .a3m-article a:hover {
+	color: #04473e;
+}
+
+body.a3m-body .a3m-article strong,
+body.a3m-body .a3m-article b {
+	color: #0b1530;
+}
+
+body.a3m-body .a3m-article code {
+	padding: 1px 6px;
+	color: #0b1530;
+	font: 0.9em ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+	background: #e2eaf6;
+	border-radius: 5px;
+}
+
+body.a3m-body .a3m-article > :is(ul, ol) {
+	padding-left: 1.4em;
+}
+
+body.a3m-body .a3m-article :is(ul, ol) > li {
+	margin-bottom: 0.55em;
+	padding-left: 0.2em;
+}
+
+body.a3m-body .a3m-article ul > li::marker {
+	color: #1fbfa6;
+}
+
+body.a3m-body .a3m-article ol > li::marker {
+	color: #4a5b82;
+	font-weight: 700;
+	font-variant-numeric: tabular-nums;
+}
+
+/* ---- tables: shells, orbitals and isotope data ---- */
+
+body.a3m-body .a3m-article > table {
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 0;
+	overflow: hidden;
+	font-size: 0.96rem;
+	line-height: 1.45;
+	font-variant-numeric: tabular-nums;
+	background: #fff;
+	border: 1px solid #d3dcec;
+	border-radius: 14px;
+	box-shadow: 0 1px 2px rgba(10, 19, 48, 0.05), 0 8px 24px rgba(10, 19, 48, 0.05);
+}
+
+body.a3m-body .a3m-article table :is(th, td) {
+	padding: 11px 14px;
+	text-align: left;
+	vertical-align: top;
+	border-bottom: 1px solid #e3e9f4;
+}
+
+body.a3m-body .a3m-article table thead th {
+	color: #e8eefc;
+	font-size: 0.74rem;
+	font-weight: 800;
+	letter-spacing: 0.09em;
+	text-transform: uppercase;
+	background: #0d1a3d;
+	border-bottom: 0;
+}
+
+body.a3m-body .a3m-article table tbody tr:last-child :is(th, td) {
+	border-bottom: 0;
+}
+
+body.a3m-body .a3m-article table tbody td:first-child {
+	color: #0b1530;
+	font-weight: 700;
+}
+
+body.a3m-body .a3m-article table tbody tr:nth-child(even) {
+	background: #f6f9fe;
+}
+
+body.a3m-body .a3m-article table tbody tr {
+	transition: background var(--d1);
+}
+
+body.a3m-body .a3m-article table tbody tr:hover {
+	background: #e9f6f3;
+}
+
+body.a3m-body .a3m-article :is(sup, sub) {
+	line-height: 0;
+}
+
+@media (max-width: 640px) {
+	/* Wide data tables scroll inside themselves instead of widening the page. */
+	body.a3m-body .a3m-article > table {
+		display: block;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	body.a3m-body .a3m-article table :is(th, td) {
+		padding: 9px 11px;
+	}
+}
+
+/* The credits carry full dataset URLs: they must wrap instead of widening the page. */
+body.a3m-body .a3m-article .a3m-credits li {
+	overflow-wrap: anywhere;
+}
+
+/* ---- figures ---- */
+
+body.a3m-body .a3m-article > figure {
+	margin-left: 0;
+	margin-right: 0;
+}
+
+body.a3m-body .a3m-article figure img {
+	display: block;
+	width: 100%;
+	height: auto;
+	border-radius: 14px;
+}
+
+body.a3m-body .a3m-article figcaption {
+	margin-top: 8px;
+	color: #52628a;
+	font-size: 0.86rem;
+	line-height: 1.45;
+}
+
+/* ---- FAQ: every h3 after the #faq heading is a question ---- */
+
+body.a3m-body .a3m-article > h2#faq ~ h3 {
+	margin: 0;
+	padding: 20px 0 4px;
+	font-size: 1.08rem;
+	border-top: 1px solid #d3dcec;
+}
+
+body.a3m-body .a3m-article > h2#faq ~ h3 + p {
+	margin-bottom: 0.6em;
+}
+
+body.a3m-body .a3m-article > h2#faq ~ h2 {
+	margin-top: 3em;
+}
+
+/* ---- sources: the last list, smaller and quieter ---- */
+
+body.a3m-body .a3m-article > h2#sources ~ ul {
+	color: #4a5b82;
+	font-size: 0.9rem;
+	line-height: 1.6;
+}
+
+body.a3m-body .a3m-article > h2#sources + ul li::marker {
+	color: #8b9ac0;
+}
+
+/* ------------------------------------------------------------------ footer */
+
+.a3m-foot {
+	position: relative;
+	z-index: 1;
+	color: #a9b8d6;
+	background: #050a1a;
+	border-top: 1px solid rgba(160, 190, 255, 0.16);
+}
+
+.a3m-foot-in {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 14px 28px;
+	max-width: 1100px;
+	margin: 0 auto;
+	padding: 28px 20px 34px;
+}
+
+.a3m-foot-logo {
+	color: #fff;
+	font: 700 1.4rem var(--a3m-serif);
+	text-decoration: none;
+}
+
+.a3m-foot-logo span {
+	color: #3de0c4;
+}
+
+.a3m-foot-nav {
+	display: flex;
+	gap: 22px;
+}
+
+body.a3m-body .a3m-foot a {
+	color: #dce6fb;
+	font-size: 0.92rem;
+	font-weight: 600;
+	text-decoration: none;
+}
+
+body.a3m-body .a3m-foot a:hover {
+	color: #3de0c4;
+}
+
+.a3m-foot-c {
+	flex-basis: 100%;
+	margin: 0;
+	color: #8a9bc0;
+	font-size: 0.8rem;
+}
+
+@media (max-width: 600px) {
+	body.a3m-body .a3m-article {
+		padding-top: 56px;
+		font-size: 1rem;
+	}
+
+	body.a3m-body .a3m-article > p.a3m-answer {
+		font-size: 1.14rem;
+	}
+
+	body.a3m-body .a3m-article table :is(th, td) {
+		padding: 9px 10px;
+	}
+
+	body.a3m-body .a3m-article > table {
+		font-size: 0.88rem;
+	}
+}

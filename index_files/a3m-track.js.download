@@ -1,0 +1,200 @@
+/*! a3m-track.js - measurement and the Mediavine lazy loader. ASCII only.
+ *
+ * Ported from fossils-near-you/js/fny-track.js (itself from the Little Astronomy
+ * telescope finder, with the scroll backstop from the 33gears 0-60 calculator).
+ *
+ * GA4 (Site Kit tag id from the page config) is configured here because the
+ * standalone template strips every theme hook, including Site Kit's snippet. It
+ * loads on requestIdleCallback, never on window.load: once Mediavine is on the
+ * page, load can be tens of seconds away behind ad requests. Every call is
+ * wrapped: analytics must never be able to break the tool.
+ *
+ * Mediavine is injected only when the article's FIRST h2 reaches the viewport.
+ * Two triggers, because either alone loses revenue:
+ *   - an IntersectionObserver on that h2 (observing the article itself with any
+ *     rootMargin fires on load: the stage is exactly one viewport tall);
+ *   - a passive, rAF-throttled scroll check. An observer only calls back when
+ *     the intersection STATE changes, so a jump scroll (anchor link, fast
+ *     flick, restored position) that takes the sentinel from below the fold to
+ *     above it in one frame never calls it, and that pageview loads no ads.
+ * Never with ?embed=1 (the server omits the tag too).
+ *
+ * Once Mediavine's adhesion bar exists, --a3m-adh carries its height so the
+ * phone sheet and the quiz HUD ride above it.
+ */
+(function () {
+	'use strict';
+
+	var W = window;
+	var D = document;
+	var A3M = W.A3M = W.A3M || {};
+	var root = W.a3mConfig || {};
+	var cfg = root.track || {};
+	var embed = !!root.embed;
+	var booted = false;
+
+	W.dataLayer = W.dataLayer || [];
+	if (typeof W.gtag !== 'function') {
+		W.gtag = function () { W.dataLayer.push(arguments); };
+	}
+
+	function idle(fn) {
+		if ('requestIdleCallback' in W) { W.requestIdleCallback(fn, { timeout: 3000 }); }
+		else { W.setTimeout(fn, 1500); }
+	}
+
+	function loadGtag() {
+		if (booted || !cfg.ga) { return; }
+		booted = true;
+		try {
+			W.gtag('js', new Date());
+			W.gtag('set', 'linker', { domains: ['33science.com'] });
+			W.gtag('config', cfg.ga, { send_page_view: true, content_group: 'atom-3d-model' });
+			if (W.__a3mTestMode) { return; }
+			var s = D.createElement('script');
+			s.async = true;
+			s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(cfg.ga);
+			D.head.appendChild(s);
+		} catch (e) { /* analytics never breaks the tool */ }
+	}
+
+	function send(name, params) {
+		try {
+			var p = {};
+			var k;
+			var base = {};
+			for (k in base) { if (Object.prototype.hasOwnProperty.call(base, k)) { p[k] = base[k]; } }
+			params = params || {};
+			for (k in params) { if (Object.prototype.hasOwnProperty.call(params, k)) { p[k] = params[k]; } }
+			W.gtag('event', name, p);
+		} catch (e) { /* ignore */ }
+	}
+
+	/* The UI script may queue early events on A3M._q; this replaces its stub and drains it. */
+	var queued = A3M._q || [];
+	A3M._q = [];
+	A3M.track = send;
+	W.a3mTrack = send;
+	queued.forEach(function (a) { send(a[0], a[1]); });
+
+	idle(loadGtag);
+
+	/* ------------------------------------------------- delegated click events */
+
+	D.addEventListener('click', function (ev) {
+		var a = ev.target.closest ? ev.target.closest('a') : null;
+		if (!a) { return; }
+		var inArticle = !!a.closest('.a3m-article');
+		if (inArticle || a.closest('.a3m-info') || a.closest('.a3m-controls')) {
+			var href = a.getAttribute('href') || '';
+			send('link_click', { link_url: href.slice(0, 120), where: inArticle ? 'article' : 'panel' });
+		}
+	}, true);
+
+	/* ------------------------------------------------------ article + Mediavine */
+
+	var article = D.querySelector('[data-a3m-article]');
+	if (!article || embed) { return; }
+
+	var adsLoaded = false;
+	var seen = false;
+
+	function loadAds() {
+		if (adsLoaded || !cfg.mvTag) { return; }
+		adsLoaded = true;
+		try {
+			D.body.classList.add('a3m-ads');
+			if (W.__a3mTestMode) { A3M.adsRequested = true; return; }
+			var tpl = D.createElement('div');
+			tpl.innerHTML = cfg.mvTag;
+			var src = tpl.firstElementChild;
+			if (!src || src.tagName !== 'SCRIPT') { return; }
+			var s = D.createElement('script');
+			s.async = true;
+			s.src = src.getAttribute('src');
+			s.id = src.id || 'mv-script-wrapper-js';
+			s.setAttribute('fetchpriority', 'high');
+			s.setAttribute('data-noptimize', '1');
+			s.setAttribute('data-cfasync', 'false');
+			D.body.appendChild(s);
+			watchAdhesion();
+		} catch (e) { /* ignore */ }
+	}
+
+	function reached() {
+		if (!seen) { seen = true; send('article_view', {}); }
+		loadAds();
+		teardown();
+	}
+
+	/* Watch the first heading, not the article (see the header). */
+	var sentinel = article.querySelector('h2') || article.querySelector('p') || article;
+	var io = null;
+	var ticking = false;
+
+	function check() {
+		ticking = false;
+		/* Visible, or already scrolled past: both mean the reader reached the article. */
+		if (sentinel.getBoundingClientRect().top < (W.innerHeight || D.documentElement.clientHeight)) {
+			reached();
+		}
+	}
+
+	function onScroll() {
+		if (ticking) { return; }
+		ticking = true;
+		W.requestAnimationFrame(check);
+	}
+
+	function teardown() {
+		if (io) { io.disconnect(); io = null; }
+		W.removeEventListener('scroll', onScroll);
+		W.removeEventListener('resize', onScroll);
+		W.removeEventListener('hashchange', onScroll);
+	}
+
+	if ('IntersectionObserver' in W) {
+		io = new IntersectionObserver(function (entries) {
+			for (var i = 0; i < entries.length; i++) {
+				if (entries[i].isIntersecting) { reached(); return; }
+			}
+		}, { rootMargin: '0px', threshold: 0 });
+		io.observe(sentinel);
+	}
+	W.addEventListener('scroll', onScroll, { passive: true });
+	W.addEventListener('resize', onScroll, { passive: true });
+	W.addEventListener('hashchange', onScroll);
+	/* A restored scroll position or a #hash can start below the sentinel with no scroll event. */
+	onScroll();
+
+	/* ---------------------------------------------------- adhesion bar offset */
+
+	function adhesionHeight() {
+		var els = D.querySelectorAll('[id^="adhesion_"][id$="_wrapper"], .adhesion_wrapper');
+		var h = 0;
+		for (var i = 0; i < els.length; i++) {
+			var cs = W.getComputedStyle(els[i]);
+			if (cs.display === 'none' || cs.visibility === 'hidden') { continue; }
+			h = Math.max(h, els[i].getBoundingClientRect().height);
+		}
+		return Math.round(h);
+	}
+
+	function setAdh() {
+		D.documentElement.style.setProperty('--a3m-adh', adhesionHeight() + 'px');
+	}
+
+	function watchAdhesion() {
+		var pending = false;
+		function schedule() {
+			if (pending) { return; }
+			pending = true;
+			W.requestAnimationFrame(function () { pending = false; setAdh(); });
+		}
+		try {
+			new MutationObserver(schedule).observe(D.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['style', 'class'] });
+		} catch (e) { /* ignore */ }
+		W.addEventListener('resize', schedule, { passive: true });
+		setAdh();
+	}
+}());
