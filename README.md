@@ -1,6 +1,6 @@
 # bleh-uranium
 bài thực hành
-ĐÂY LÀ LÀM BỞI NHÓM TỔ 4
+ĐÂY LÀ LÀM BỞI NHÓM TỔ 3
 KHÔNG CÓ AI Ở TRONG CÁI PHẦN BÀI THỰC HÀNH NÀY
 
 ( FAN KO AI!!!! )

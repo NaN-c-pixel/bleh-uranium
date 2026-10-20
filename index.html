@@ -86,9 +86,71 @@ html.wl-lock,html.wl-lock body{overflow:hidden !important}
 @media (prefers-reduced-motion:reduce){
  #welcome,#welcome .wl-in{transition-duration:.01s !important}
  #welcome *{animation:none !important}}
+
+/* ---- cover page (orange + white), sits above the welcome page ---- */
+#cover{position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;
+ padding:32px 24px;overflow:auto;color:#3a2412;
+ font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;
+ background:radial-gradient(circle at 85% 15%,#ffd9b8 0%,transparent 45%),
+  radial-gradient(circle at 10% 90%,#ffe9d4 0%,transparent 50%),
+  linear-gradient(160deg,#fff 0%,#fffaf4 55%,#ffeedd 100%);
+ transition:opacity 1s ease,visibility 0s linear 1s}
+#cover::before{content:"";position:fixed;right:-18vmin;bottom:-18vmin;width:70vmin;height:70vmin;border-radius:50%;
+ background:linear-gradient(135deg,#ff7a1a 0%,#e85d04 100%);opacity:.92;pointer-events:none}
+#cover.cv-leaving{opacity:0;visibility:hidden;pointer-events:none}
+#cover .cv-in{position:relative;z-index:2;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;max-width:1100px;width:100%}
+#cover .cv-tag{display:inline-block;padding:6px 14px;border-radius:999px;background:#ff7a1a;color:#fff;
+ font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase}
+#cover h1{margin:18px 0 10px;font:800 clamp(44px,9vw,104px)/.95 "Segoe UI",system-ui,Arial,sans-serif;letter-spacing:-2px;color:#e85d04}
+#cover h1 span{color:#3a2412}
+#cover .cv-sub{margin:0 0 28px;font-size:clamp(16px,2vw,22px);color:#6b4a30}
+#cover .cv-team{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:34px}
+#cover .cv-team span{padding:7px 14px;background:#fff;border:1.5px solid #ffd9b8;border-radius:999px;font-size:14px;font-weight:600}
+#cover .cv-btn{display:inline-flex;align-items:center;gap:10px;padding:14px 28px;border:0;border-radius:14px;
+ background:#e85d04;color:#fff;font:700 17px "Segoe UI",system-ui,Arial,sans-serif;cursor:pointer;
+ box-shadow:0 10px 24px rgba(232,93,4,.35);transition:transform .15s ease,box-shadow .15s ease}
+#cover .cv-btn:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(232,93,4,.45)}
+#cover .cv-btn:focus-visible{outline:3px solid #3a2412;outline-offset:3px}
+#cover .cv-atom-wrap{display:flex;justify-content:center}
+#cover .cv-atom{width:min(80vw,420px);aspect-ratio:1;overflow:visible}
+#cover .cv-orbit{fill:none;stroke:#e85d04;stroke-width:2.2;opacity:.8}
+#cover .cv-orbit.w{stroke:#fff;opacity:.95}
+#cover .cv-spin{transform-origin:200px 200px;animation:cvSpin 18s linear infinite}
+#cover .cv-spin.rev{animation-duration:26s;animation-direction:reverse}
+@keyframes cvSpin{to{transform:rotate(360deg)}}
+@media (max-width:760px){
+ #cover .cv-in{grid-template-columns:1fr}
+ #cover .cv-atom-wrap{order:-1}
+ #cover .cv-atom{width:min(60vw,260px)}
+ #cover::before{width:90vmin;height:90vmin;right:-35vmin;bottom:-35vmin}}
+@media (prefers-reduced-motion:reduce){
+ #cover{transition-duration:.01s !important}
+ #cover .cv-spin{animation:none}}
 </style>
 </head>
 <body class="a3m-body single-post grow-content-body">
+<div id="cover" role="dialog" aria-modal="true" aria-label="Trang bìa">
+<div class="cv-in">
+<div>
+<span class="cv-tag">Bài thực hành · Tổ 3</span>
+<h1>URANIUM<br><span>-235</span></h1>
+<p class="cv-sub">Mô hình nguyên tử 3D: 92 proton · 143 neutron · 92 electron</p>
+<div class="cv-team"><span>Kiệt</span><span>Tài</span><span>Thảo Nguyên</span><span>Hùng</span><span>Xuân Bảo Ngọc</span><span>Tiến Phát</span><span>Nhiên</span><span>Trúc</span><span>Hân</span><span>Người bị gãy tay</span></div>
+<button type="button" class="cv-btn" id="cover-go">Bắt đầu →</button>
+</div>
+<div class="cv-atom-wrap" aria-hidden="true">
+<svg class="cv-atom" viewBox="0 0 400 400">
+<g class="cv-spin"><ellipse class="cv-orbit" cx="200" cy="200" rx="185" ry="70"/><circle cx="385" cy="200" r="9" fill="#3a2412"/></g>
+<g class="cv-spin rev" style="transform:rotate(60deg)"><ellipse class="cv-orbit w" cx="200" cy="200" rx="185" ry="70"/><circle cx="15" cy="200" r="9" fill="#fff"/></g>
+<g class="cv-spin" style="transform:rotate(120deg);animation-duration:22s"><ellipse class="cv-orbit" cx="200" cy="200" rx="185" ry="70"/><circle cx="200" cy="130" r="9" fill="#3a2412"/></g>
+<circle cx="200" cy="200" r="34" fill="#fff" opacity=".9"/>
+<circle cx="190" cy="192" r="11" fill="#ff4354"/><circle cx="210" cy="194" r="11" fill="#8a6a50"/>
+<circle cx="198" cy="212" r="11" fill="#8a6a50"/><circle cx="214" cy="210" r="10" fill="#ff4354"/>
+<circle cx="184" cy="210" r="9" fill="#ff4354"/>
+</svg>
+</div>
+</div>
+</div>
 <div id="welcome" role="dialog" aria-modal="true" aria-label="Chào mừng">
 <div class="wl-glow wl-g1"></div><div class="wl-glow wl-g2"></div>
 <div class="wl-in">
@@ -534,6 +596,23 @@ html.wl-lock,html.wl-lock body{overflow:hidden !important}
   setTimeout(finish,2300);
  }
  b.addEventListener('click',go);
+})();
+</script>
+<script>
+(function(){
+ var c=document.getElementById('cover'),b=document.getElementById('cover-go');
+ if(!c||!b)return;
+ var done=false;
+ function onKey(e){ if(e.key==='ArrowDown'||e.key==='PageDown')leave(); }
+ function leave(){
+  if(done)return; done=true;
+  document.removeEventListener('keydown',onKey);
+  c.classList.add('cv-leaving');
+  setTimeout(function(){ if(c.parentNode)c.parentNode.removeChild(c); },1100);
+ }
+ b.addEventListener('click',leave);
+ document.addEventListener('keydown',onKey);
+ b.focus();
 })();
 </script>
 </body></html>
