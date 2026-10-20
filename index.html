@@ -49,45 +49,8 @@
 /* quiz hidden */
 [data-tab="quiz"],[data-panel="quiz"],#a3m-tab-quiz,#a3m-panel-quiz{display:none !important}
 
-/* ---- welcome page ---- */
-html.wl-lock,html.wl-lock body{overflow:hidden !important}
-#welcome{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;
- padding:24px;text-align:center;color:#fff;overflow:hidden;
- background:radial-gradient(ellipse at 50% 40%,#0f1f4d 0%,#070e26 55%,#030715 100%);
- transition:opacity 2.2s cubic-bezier(.45,0,.25,1),visibility 0s linear 2.2s}
-#welcome .wl-in{position:relative;max-width:900px
- transition:transform 2.2s cubic-bezier(.3,0,.2,1),opacity 1.6s ease-in-out,filter 2.2s ease-in-out}
-#welcome .wl-line{margin:0 0 .35em;font:500 clamp(1.15rem,3.2vw,1.9rem)/1.4 var(--a3m-sans,system-ui,"Segoe UI",Roboto,Arial,sans-serif);
- color:#cfe0ff;animation:wlUp .9s ease both}
-#welcome .wl-go{all:unset;box-sizing:border-box;cursor:pointer;display:inline-block;padding:.1em .3em;border-radius:14px;
- font:700 clamp(2rem,7vw,4.4rem)/1.15 var(--a3m-serif,Georgia,"Times New Roman",serif);
- color:#fff;text-shadow:0 0 30px rgba(61,224,196,.35);
- transition:transform .35s ease;animation:wlUp 1s ease .2s both}
-#welcome .wl-go strong{font-weight:800}
-#welcome .wl-go:hover{transform:scale(1.04)}
-#welcome .wl-go:hover strong{
- background:linear-gradient(90deg,#ff3b3b,#ff9a1f,#ffe629,#37d46a,#25c8e8,#4a6bff,#b24dff,#ff3b3b);
- background-size:300% 100%;-webkit-background-clip:text;background-clip:text;
- -webkit-text-fill-color:transparent;color:transparent;text-shadow:none;
- animation:wlRainbow 3s linear infinite}
-#welcome .wl-go:focus-visible{outline:2px solid #3de0c4;outline-offset:6px}
-#welcome .wl-hint{margin:1.6em 0 0;font:500 .95rem var(--a3m-sans,system-ui,Arial,sans-serif);
- color:#7f93c4;letter-spacing:.04em;animation:wlUp 1s ease .6s both,wlPulse 2.4s ease-in-out 1.6s infinite}
-#welcome .wl-glow{position:absolute;border-radius:50%;filter:blur(70px);opacity:.5;pointer-events:none}
-#welcome .wl-g1{width:420px;height:420px;left:8%;top:12%;background:#1fbfa6;animation:wlFloat 9s ease-in-out infinite}
-#welcome .wl-g2{width:380px;height:380px;right:6%;bottom:8%;background:#4a6bff;animation:wlFloat 11s ease-in-out infinite reverse}
-/* leaving: text grows and melts away, the dark curtain fades and shows the atom */
-#welcome.wl-leaving{opacity:0;visibility:hidden;pointer-events:none}
-#welcome.wl-leaving .wl-in{transform:scale(1.35);opacity:0;filter:blur(10px)}
-@keyframes wlRainbow{to{background-position:300% 0}}
-@keyframes wlUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
-@keyframes wlPulse{50%{opacity:.45}}
-@keyframes wlFloat{50%{transform:translate(40px,-30px) scale(1.12)}}
-@media (prefers-reduced-motion:reduce){
- #welcome,#welcome .wl-in{transition-duration:.01s !important}
- #welcome *{animation:none !important}}
 
-/* ---- cover page (orange + white), sits above the welcome page ---- */
+/* ---- cover page (orange + white) ---- */
 #cover{position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;
  padding:32px 24px;overflow:auto;color:#3a2412;
  font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;
@@ -151,15 +114,6 @@ html.wl-lock,html.wl-lock body{overflow:hidden !important}
 </div>
 </div>
 </div>
-<div id="welcome" role="dialog" aria-modal="true" aria-label="Chào mừng">
-<div class="wl-glow wl-g1"></div><div class="wl-glow wl-g2"></div>
-<div class="wl-in">
-<p class="wl-line">Xin chào Thầy cô và các bạn tới bài</p>
-<button type="button" class="wl-go" id="welcome-go"><strong>Hóa học mô hình nguyên tố</strong></button>
-<p class="wl-hint">Bấm vào tên bài để bắt đầu</p>
-</div>
-</div>
-<script>document.documentElement.classList.add('wl-lock');</script>
 
 <main class="a3m-stage is-enter is-ready" data-a3m-stage="">
 	<picture class="a3m-poster-pic">
@@ -580,24 +534,6 @@ html.wl-lock,html.wl-lock body{overflow:hidden !important}
 <script src="./index_files/a3m-track.js.download" defer=""></script>
 
 
-<script>
-(function(){
- var w=document.getElementById('welcome'),b=document.getElementById('welcome-go');
- if(!w||!b)return;
- var done=false;
- function finish(){
-  if(w.parentNode)w.parentNode.removeChild(w);
-  document.documentElement.classList.remove('wl-lock');
-  window.scrollTo(0,0);
- }
- function go(){
-  if(done)return; done=true;
-  w.classList.add('wl-leaving');
-  setTimeout(finish,2300);
- }
- b.addEventListener('click',go);
-})();
-</script>
 <script>
 (function(){
  var c=document.getElementById('cover'),b=document.getElementById('cover-go');
