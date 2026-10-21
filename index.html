@@ -418,6 +418,7 @@
   if(done)return; done=true;
   document.removeEventListener('keydown',onKey);
   c.classList.add('cv-leaving');
+  window.dispatchEvent(new Event('cover-left'));
   setTimeout(function(){ if(c.parentNode)c.parentNode.removeChild(c); },1100);
  }
  b.addEventListener('click',leave);
